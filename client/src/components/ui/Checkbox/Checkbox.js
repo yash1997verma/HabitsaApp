@@ -30,7 +30,7 @@ export const  Checkbox= ({status,id, date})=> {
 
     // send req to back end to update status
     try{
-      const res = await axios.put(`http://localhost:8000/habit/changeHabitState/${id}`, dateStatus )
+      const res = await axios.put(`https://habitsaapp.onrender.com/habit/changeHabitState/${id}`, dateStatus )
     }catch(err){
       console.log(err);
     }

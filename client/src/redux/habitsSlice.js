@@ -11,7 +11,7 @@ export const fetchWeelyHabitsAsync = createAsyncThunk(
     async (payload)=>{
         try{
             const{startOfWeek, endOfWeek} = payload;
-            const res = await axios.get('http://localhost:8000/habit/getWeeklyHabits',{
+            const res = await axios.get('https://habitsaapp.onrender.com/habit/getWeeklyHabits',{
                 params:{
                     startOfWeek,
                     endOfWeek,
@@ -33,7 +33,7 @@ export const getTodayHabitsAsync = createAsyncThunk(
     async(payload)=>{
         try{
            
-            const resdata = await axios.get('http://localhost:8000/habit/getTodayHabits');
+            const resdata = await axios.get('https://habitsaapp.onrender.com/habit/getTodayHabits');
             // console.log(resdata.data)
             return resdata.data;
         }catch(err){
@@ -48,7 +48,7 @@ export const addHabitAsync = createAsyncThunk(
     "habits/addHabitAsync",
     async(newHabit)=>{
         try{
-            const res = await axios.post('http://localhost:8000/habit/addHabit', newHabit);
+            const res = await axios.post('https://habitsaapp.onrender.com/habit/addHabit', newHabit);
             return res.data;
         }catch(err){
             return err;
@@ -61,7 +61,7 @@ export const editHabitAsync = createAsyncThunk(
     "habits/editHabitAsync",
     async({id,newHabit})=>{
         try{
-            const res = await axios.put(`http://localhost:8000/habit/editHabit/${id}`, newHabit);
+            const res = await axios.put(`https://habitsaapp.onrender.com/habit/editHabit/${id}`, newHabit);
             
             return res.data;
         }catch(err){
@@ -75,7 +75,7 @@ export const deleteHabitAsync = createAsyncThunk(
     "habits/delteHabitAsync",
     async({id})=>{
         try{
-            const res = await axios.delete(`http://localhost:8000/habit/deleteHabit/${id}`);
+            const res = await axios.delete(`https://habitsaapp.onrender.com/habit/deleteHabit/${id}`);
             // console.log(res)
         }catch(err){
             console.log(err)
