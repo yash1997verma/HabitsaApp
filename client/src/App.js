@@ -12,8 +12,6 @@ import { Provider } from 'react-redux';
 //toastify
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-//radix
-// import '@radix-ui/themes/styles.css';
 import { Theme } from '@radix-ui/themes';
 
 function App() {
