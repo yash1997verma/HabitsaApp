@@ -18,8 +18,10 @@ export const HabitForm = () => {
     useEffect(()=>{
         if (editHabit.bool) {
             nameRef.current.value = editHabit.habit.name;
-            goalRef.current.value = editHabit.habit.goal;
             descRef.current.value = editHabit.habit.description;
+            startRef.current.value = new Date(editHabit.habit.startDate).toISOString().slice(0, 10);
+            endRef.current.value = new Date(editHabit.habit.endDate).toISOString().slice(0, 10);//convert date, to pre-fill from
+            goalRef.current.value = editHabit.habit.goal;  
         } else {
             nameRef.current.value = "";
             goalRef.current.value = "";
@@ -28,12 +30,11 @@ export const HabitForm = () => {
     },[])
 
     //handle add habit, we will handle edit habit also with same
-    const handleAdd = (e)=>{
+const handleAdd = (e)=>{
         e.preventDefault();
         
         if(editHabit.bool){//edit habit with new data
             
-
             //create a new habit with new details
             const newHabit = {
                 name: nameRef.current.value,
@@ -41,6 +42,7 @@ export const HabitForm = () => {
                 startDate: startRef.current.value,
                 endDate: endRef.current.value,
                 goal: goalRef.current.value,
+                progress: editHabit.habit.progress,// event if the habit is edited the progress of the habit remains unchannged
             }
             const id = editHabit.habit._id;
             
@@ -52,7 +54,7 @@ export const HabitForm = () => {
             
             return;
         }
-        else{
+        else{ //create a new habit
             const newHabit = {
                 name: nameRef.current.value,
                 description: descRef.current.value,

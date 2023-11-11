@@ -1,7 +1,7 @@
 import { Navbar } from "../components/Navbar/Navbar"
 import { ViewController } from "../components/ViewController/ViewController";
-import { Navigate, Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { useEffect  } from "react";
 import { useNavigate } from "react-router-dom";
 import { HabitForm } from "../components/Habit/HabitForm";
 import { useSelector } from "react-redux";
@@ -22,7 +22,7 @@ export const HomePage = ()=>{
         }else{
             navigate("/");
         }
-    },[appView]);
+    },[appView, navigate]);
 
     
     return(

@@ -1,9 +1,8 @@
-
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
 //for toastify
 import { toast } from "react-toastify";
-import { format, addDays, startOfWeek, endOfWeek } from "date-fns"; // Import necessary functions
+import { startOfWeek, endOfWeek } from "date-fns";
 
 
 //async call to get weekly habits all the habits
@@ -49,6 +48,8 @@ export const addHabitAsync = createAsyncThunk(
     "habits/addHabitAsync",
     async(newHabit)=>{
         try{
+            console.log(`add:`)
+            console.log(newHabit)
             const res = await axios.post('https://habitsaapp.onrender.com/habit/addHabit', newHabit);
             return res.data;
         }catch(err){
@@ -62,6 +63,8 @@ export const editHabitAsync = createAsyncThunk(
     "habits/editHabitAsync",
     async({id,newHabit})=>{
         try{
+            console.log("edit")
+            console.log(newHabit)
             const res = await axios.put(`https://habitsaapp.onrender.com/habit/editHabit/${id}`, newHabit);
             
             return res.data;
@@ -137,8 +140,6 @@ const habitsSlice  =  createSlice({
             state.status = 'loading'
         })
         .addCase(fetchWeelyHabitsAsync.fulfilled, (state, action)=>{
-            // console.log(state.habits)
-
             state.status = 'succeeded';
             state.habits = action.payload;
         })
@@ -156,8 +157,26 @@ const habitsSlice  =  createSlice({
                 theme: "light",
             });
         })
+        .addCase(getTodayHabitsAsync.pending, (state, action)=>{
+            state.status = 'loading';
+        })
         .addCase(getTodayHabitsAsync.fulfilled,(state, action)=>{
-           state.habits = action.payload;
+            state.status = 'succeeded';
+            state.habits = action.payload;
+        })
+        .addCase(getTodayHabitsAsync.rejected, (state, action)=>{
+            state.status = 'failed';
+            state.error = action.error.message;
+            toast.error('Unable to fetch Habits!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
         })
         //for adding habit
         .addCase(addHabitAsync.fulfilled, (state, action)=>{
