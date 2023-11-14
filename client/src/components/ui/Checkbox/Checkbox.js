@@ -1,12 +1,13 @@
-import axios from 'axios';
 import React, { useState } from 'react';
-
+import { habitStatusChange } from '../../../redux/habitsSlice';
+import { useDispatch } from 'react-redux';
 export const  Checkbox= ({status,id, date})=> {
   const [habitStatus, setHabitStatus] = useState(status);//whatever status is saved that will be displayed
+  const dispatch = useDispatch();
   const handleCheckboxChange = async () => {
 
     //create object which contains date and the staus of that date
-    //we will push this obj in the habitData array
+    //we will use this data to create a doc in habitDateStatus, which is referenced by habit docs
     // by default all the dates habe a none status, we only save the ones, whose status is changed
     const dateStatus = {
       date,
@@ -20,20 +21,19 @@ export const  Checkbox= ({status,id, date})=> {
     } else if (habitStatus === 'not-done') {
       setHabitStatus('none'); // Change to "not-done" state
       dateStatus.status = 'none';
-
     } else {
       setHabitStatus('done'); // Change to "No Action" state
       dateStatus.status = 'done';
 
     }
-  
+    dispatch(habitStatusChange({id, dateStatus}));
 
     // send req to back end to update status
-    try{
-      const res = await axios.put(`https://habitsaapp.onrender.com/habit/changeHabitState/${id}`, dateStatus )
-    }catch(err){
-      console.log(err);
-    }
+    // try{
+    //   // const res = await axios.put(`https://habitsaapp.onrender.com/habit/changeHabitState/${id}`, dateStatus )
+    // }catch(err){
+    //   console.log(err);
+    // }
 
 
   };

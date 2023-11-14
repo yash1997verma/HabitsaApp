@@ -21,6 +21,7 @@ export const TodayView = ({ toggleHabitForm }) => {
     }
 
     
+    
 
     useEffect(()=>{
         getHabits();
@@ -36,11 +37,11 @@ export const TodayView = ({ toggleHabitForm }) => {
                 {loadingStatus ==='loading' && 
                     <table className="font-mono font-extralight w-full">
                         <thead>
-                            <div className="h-10 w-full">
+                            <tr className="h-10 w-full">
                                 <th>
 
                                 </th>
-                            </div>
+                            </tr>
                         </thead>
 
                         <tbody className="border  shadow rounded-md  w-full mx-auto">

@@ -123,8 +123,8 @@ module.exports.changeHabitState = async (req, res) => {
         // console.log(`out: ${dateStatus.status}`)
           //increase progress
             if(dateStatus.status === 'done'){
-                currHabit.progress++;
-                await currHabit.save();
+                currHabit.progress++ ;
+                await currHabit.save() ;
             }else if(dateStatus.status ==='not-done' && currHabit.progress>0){
                 currHabit.progress--;
                 await currHabit.save();
@@ -154,15 +154,11 @@ module.exports.changeHabitState = async (req, res) => {
             // update ref in habit
             currHabit.habitDateStatus.push(newDateStatus._id);
             await currHabit.save();
-
-         
            
         }
 
-       
-
         // Return the updated habit
-        res.status(200).json('done');
+        res.status(200).json(currHabit);
     } catch (err) {
         console.log(err);
         res.status(500).json('Error in updating status');

@@ -9,9 +9,8 @@ import { TodayView } from "./components/Habit/TodayView/TodayView";
 //redux store
 import store from './store';
 import { Provider } from 'react-redux';
-//toastify
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+//hot toast
+import toast, { Toaster } from 'react-hot-toast';
 import { Theme } from '@radix-ui/themes';
 
 function App() {
@@ -38,7 +37,7 @@ function App() {
     <Provider store={store}>
       <Theme>
         <RouterProvider router={router}></RouterProvider>
-        <ToastContainer />
+        <Toaster />
       </Theme>
     </Provider>
     

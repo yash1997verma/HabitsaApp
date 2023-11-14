@@ -34,7 +34,7 @@ const handleAdd = (e)=>{
         e.preventDefault();
         
         if(editHabit.bool){//edit habit with new data
-            
+            console.log('edit')
             //create a new habit with new details
             const newHabit = {
                 name: nameRef.current.value,

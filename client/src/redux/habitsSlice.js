@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios';
-//for toastify
-import { toast } from "react-toastify";
+//hot toast
+import toast from 'react-hot-toast';
+
 import { startOfWeek, endOfWeek } from "date-fns";
 
+const apiUrl = 'https://habitsaapp.onrender.com';
 
 //async call to get weekly habits all the habits
 export const fetchWeelyHabitsAsync = createAsyncThunk(
@@ -11,7 +13,7 @@ export const fetchWeelyHabitsAsync = createAsyncThunk(
     async (payload)=>{
         try{
             const{startOfWeek, endOfWeek} = payload;
-            const res = await axios.get('https://habitsaapp.onrender.com/habit/getWeeklyHabits',{
+            const res = await axios.get(`${apiUrl}/habit/getWeeklyHabits`,{
                 params:{
                     startOfWeek,
                     endOfWeek,
@@ -32,28 +34,23 @@ export const getTodayHabitsAsync = createAsyncThunk(
     'habits/getTodayHabitsAsync' ,
     async(payload)=>{
         try{
-           
-            const resdata = await axios.get('https://habitsaapp.onrender.com/habit/getTodayHabits');
-            // console.log(resdata.data)
+            const resdata = await axios.get(`${apiUrl}/habit/getTodayHabits`);
             return resdata.data;
         }catch(err){
-            console.log(err);
-            return err;
+            throw err;
         }
     }
 )
 
-//async call to add a habit, we will just be using this to display notification
+//async call to add a habit
 export const addHabitAsync = createAsyncThunk(
     "habits/addHabitAsync",
     async(newHabit)=>{
         try{
-            console.log(`add:`)
-            console.log(newHabit)
-            const res = await axios.post('https://habitsaapp.onrender.com/habit/addHabit', newHabit);
+            const res = await axios.post(`${apiUrl}/habit/addHabit`, newHabit);
             return res.data;
         }catch(err){
-            return err;
+            throw  err;
         }
     }   
 );
@@ -63,27 +60,37 @@ export const editHabitAsync = createAsyncThunk(
     "habits/editHabitAsync",
     async({id,newHabit})=>{
         try{
-            console.log("edit")
-            console.log(newHabit)
-            const res = await axios.put(`https://habitsaapp.onrender.com/habit/editHabit/${id}`, newHabit);
-            
+            const res = await axios.put(`${apiUrl}/habit/editHabit/${id}`, newHabit);
             return res.data;
         }catch(err){
-            return err;
+            throw err;
         }
     }
 );
 
 //async call to delete habit
 export const deleteHabitAsync = createAsyncThunk(
-    "habits/delteHabitAsync",
+    "habits/deleteHabitAsync",
     async({id})=>{
         try{
-            const res = await axios.delete(`https://habitsaapp.onrender.com/habit/deleteHabit/${id}`);
-            // console.log(res)
+            const res = await axios.delete(`${apiUrl}/habit/deleteHabit/${id}`);
+            return res.data;
         }catch(err){
-            console.log(err)
-            return err;
+            throw err;
+        }
+    }
+    
+)
+
+//when user changes the status of a habit for a particular data
+export const habitStatusChange = createAsyncThunk(
+    "habits/habitStatusChange",
+    async({dateStatus, id})=>{
+        try{
+            const res = await axios.put(`${apiUrl}/habit/changeHabitState/${id}`, dateStatus );
+            return res.data;
+        }catch(err){
+            throw err;
         }
     }
     
@@ -146,16 +153,7 @@ const habitsSlice  =  createSlice({
         .addCase(fetchWeelyHabitsAsync.rejected, (state, action)=>{
             state.status = 'failed';
             state.error = action.error.message;
-            toast.error('Unable to fetch Habits!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            toast.error("Unable to fetch habits");
         })
         .addCase(getTodayHabitsAsync.pending, (state, action)=>{
             state.status = 'loading';
@@ -167,55 +165,62 @@ const habitsSlice  =  createSlice({
         .addCase(getTodayHabitsAsync.rejected, (state, action)=>{
             state.status = 'failed';
             state.error = action.error.message;
-            toast.error('Unable to fetch Habits!', {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            toast.error("Unable to fetch habits");
         })
         //for adding habit
         .addCase(addHabitAsync.fulfilled, (state, action)=>{
             //update the habit in local state
-            // state.habits.push(action.payload);
-
-            toast.success('New habit Added!', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
+            state.habits.push(action.payload);
+            toast.success('Habit Added');
+        })
+        .addCase(addHabitAsync.rejected , (state, action)=>{
+            state.status = 'failed';
+            state.error = action.payload;
+            toast.error("Error in adding Habit");
+        })
+        .addCase(deleteHabitAsync.fulfilled, (state, action)=>{
+            const deletedHabit = action.payload;
+            state.habits = state.habits.filter((habit)=>{
+                return habit._id !== deletedHabit._id;
             });
+            toast.success('Habit deleted!');
+        })
+        .addCase(deleteHabitAsync.rejected, (state, action)=>{
+            toast.error("Error in deleting Habit");
         })
         //for editing habit
-        // .addCase(editHabitAsync.fulfilled, (state, action)=>{
-        //     //update the habit in local state
-        //     const updatedHabit = action.payload;
-        //     state.habits.map((habit)=>{
-        //         if(habit._id === updatedHabit._id){
-        //             habit = updatedHabit;
-        //         }
-        //         console.log(habit)
-        //     })
-   
-        //     toast.success('Habit edited successfully!', {
-        //         position: "top-center",
-        //         autoClose: 5000,
-        //         hideProgressBar: false,
-        //         closeOnClick: true,
-        //         pauseOnHover: false,
-        //         draggable: true,
-        //         progress: undefined,
-        //         theme: "light",
-        //     });
-        // })
+        .addCase(editHabitAsync.fulfilled, (state, action)=>{
+            //update the habit in local state
+            const updatedHabit = action.payload;
+            state.habits = state.habits.map((habit)=>{
+                if(habit._id === updatedHabit._id){
+                    //return the updated habit
+                    return  habit = updatedHabit;
+                }
+                //return the habit as it is
+                return habit;
+            });
+            toast.success('Habit edited successfully!');
+        })
+        .addCase(editHabitAsync.rejected, (state, action)=>{
+            toast.error("Error in editing Habit");
+        })
+        //when ever the status of a habit changes for a particular date,
+        // we will update the local state as well, when our req to back end is resolved
+        //we will use this to show upgraded progress on the screen
+        .addCase(habitStatusChange.fulfilled, (state, action)=>{
+            //contains update progress
+            const updatedHabit = action.payload;
+            state.habits = state.habits.map((habit)=>{
+                if(habit._id === updatedHabit._id){
+                    //return the updated habit
+                    return  habit = updatedHabit;
+                }
+                //return the habit as it is
+                return habit;
+            });
+        })
+        
     },
     
 });
