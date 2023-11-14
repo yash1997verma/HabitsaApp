@@ -6,7 +6,10 @@ import toast from 'react-hot-toast';
 import { startOfWeek, endOfWeek } from "date-fns";
 
 const apiUrl = 'https://habitsaapp.onrender.com';
+// const apiUrl = 'http'
+//afsdfasdfadsfsdafadfasdfasdfasdfafasdasdfasdfasdf
 
+//master
 //async call to get weekly habits all the habits
 export const fetchWeelyHabitsAsync = createAsyncThunk(
     "habits/fetchHabitsAsync",
