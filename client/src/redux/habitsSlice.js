@@ -7,7 +7,7 @@ import { startOfWeek, endOfWeek } from "date-fns";
 
 const apiUrl = 'https://habitsaapp.onrender.com';
 
-//master
+
 //async call to get weekly habits all the habits
 export const fetchWeelyHabitsAsync = createAsyncThunk(
     "habits/fetchHabitsAsync",
