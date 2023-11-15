@@ -36,8 +36,8 @@ function App() {
   return (
     <Provider store={store}>
       <Theme>
-        <RouterProvider router={router}></RouterProvider>
         <Toaster />
+        <RouterProvider router={router}></RouterProvider>
       </Theme>
     </Provider>
     

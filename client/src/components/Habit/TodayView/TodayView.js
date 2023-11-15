@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { getTodayHabitsAsync } from "../../../redux/habitsSlice";
 import { HabitToday } from "./HabitToday";
+import toast from "react-hot-toast";
 export const TodayView = ({ toggleHabitForm }) => {
 
    
@@ -25,9 +26,16 @@ export const TodayView = ({ toggleHabitForm }) => {
 
     useEffect(()=>{
         getHabits();
+       
     }, [appView]);// fetch the habits again if the app view is switched
 
-  
+    useEffect(()=>{
+        console.log('today view ')
+        // toast.success('hello')
+        toast('Today View', {
+            icon: <img className="w-4 h-4" src="/icons/today.png" alt='N/A' />,
+        });
+    },[])
     
 
     return (
@@ -35,11 +43,13 @@ export const TodayView = ({ toggleHabitForm }) => {
             <div className="border overflow-hidden shadow-lg rounded-xl w-full md:w-[600px] lg:w-[700px]">
                 {/*Loading skeleton  */}
                 {loadingStatus ==='loading' && 
+                    <>
+                    <p className="text-center font-habitSans font-bold">Please wait back-end service is loading !!</p>
                     <table className="font-mono font-extralight w-full">
                         <thead>
                             <tr className="h-10 w-full">
                                 <th>
-
+                                    
                                 </th>
                             </tr>
                         </thead>
@@ -71,6 +81,8 @@ export const TodayView = ({ toggleHabitForm }) => {
                             ))}
                         </tbody>
                     </table>
+                    </>
+
                 }
                 {loadingStatus === 'succeeded' && //display table body when the data is recieved from api
 

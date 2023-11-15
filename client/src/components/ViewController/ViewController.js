@@ -1,11 +1,7 @@
-import { useEffect } from "react"
-import ToggleSwitch from "../ToggleSwitch/ToggleSwitch"
 import { Button } from "../ui/Button/Button"
-import { DateController } from "./DateController";
 import { useDispatch, useSelector } from "react-redux";
 import { habitsActions } from "../../redux/habitsSlice";
 import { format, addWeeks, subWeeks } from "date-fns"; // Import date-fns functions
-import { useState } from "react";
 export const ViewController = ({appView, })=>{
     const dispatch = useDispatch();
    
@@ -54,16 +50,10 @@ export const ViewController = ({appView, })=>{
         <div className="mx-8 mt-8 flex items-center justify-center">
             
             <div className="w-full md:w-[600px] lg:w-[700px]">
-                <div className="flex ">
-                    <span className=" pt-1">Today</span>
-                    <ToggleSwitch appView={appView}  />
-                    
-                    <span className="pt-1">Weekly</span>
-
-                </div>
+             
                 <div className=" flex justify-between mt-4 ">
                     <p className="pt-2 font-semibold">List of Habits</p>
-                    {/* <DateController  appView={appView}  /> */}
+
                     <Button
                         onButtonClick={handleAddHabit}
                         icon={
@@ -86,7 +76,7 @@ export const ViewController = ({appView, })=>{
                     />
                 </div>
                 {/* for showing current week view, and switiching btw weeks */}
-                {appView && 
+                {appView === 'weekly' && 
                     <div className="flex justify-between mt-10">
                         <p>{weekDisplay}</p>
                         <div className="">
