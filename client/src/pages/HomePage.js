@@ -15,20 +15,22 @@ export const HomePage = ()=>{
     //to show add habit form
     const showHabitForm = useSelector((state)=>state.habits.showHabitForm);
    
-    useEffect(()=>{
-        if(appView){
-            navigate('/weekly');
+
+    //this 
+    // useEffect(()=>{
+    //     if(appView==='weekly'){
+    //         navigate('/weekly');
             
-        }else{
-            navigate("/");
-        }
-    },[appView, navigate]);
+    //     }else if(appView=== 'today'){
+    //         navigate("/");
+    //     }
+    // },[appView, navigate]);
 
     
     return(
         <>
         {showHabitForm && <HabitForm  />}
-          <div className="h-screen w-screen bg-gradient-to-b from-[#f9feff] to-[#e9f1fc] font-habitSans ">
+          <div className="h-screen w-screen  bg-gradient-to-b from-[#f9feff] to-[#e9f1fc] font-habitSans ">
             <Navbar />
             <ViewController 
                 appView={appView} 

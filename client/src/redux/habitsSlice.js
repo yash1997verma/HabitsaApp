@@ -6,9 +6,10 @@ import toast from 'react-hot-toast';
 import { startOfWeek, endOfWeek } from "date-fns";
 
 const apiUrl = 'https://habitsaapp.onrender.com';
+// const apiUrl = 'http://localhost:8000'
 
 
-//dev
+
 
 //async call to get weekly habits all the habits
 export const fetchWeelyHabitsAsync = createAsyncThunk(
@@ -118,7 +119,7 @@ const habitsSlice  =  createSlice({
         selectedMonth: new Date().toISOString(),// Initialize with the current month
         startOfWeek: calculateWeekRange().startDate.toISOString(), // Initialize with the start of the current week
         endOfWeek: calculateWeekRange().endDate.toISOString(), // Initialize with the end of the current week
-        appView: false,//controls appview, true means today, view for now, future upgrades will have 3 views
+        appView: 'today',//controls appview, true means today, view for now, future upgrades will have 3 views
         status: 'idle',//to track status of api req
         error : null,//to store err
     },
@@ -134,7 +135,8 @@ const habitsSlice  =  createSlice({
             state.endOfWeek = action.payload;
         },
         setAppView:(state, action)=>{
-            state.appView = !state.appView;
+            const view = action.payload;
+            state.appView = view;
         },
         toggleHabitForm: (state, action)=>{
             if(action.payload){
